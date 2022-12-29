@@ -5,29 +5,58 @@ using UnityEngine;
 public class BuckerPlatformMoving : MonoBehaviour
 {
     public Rigidbody rb;
-    public Vector3 startpos;
+    private Vector3 startpos;
     private float speed=0.1F;
-    public float minY;
-    public float maxY;
-    void Start()
+    private float minY;
+    private float maxY;
+    private int flag = 0;
+    public void Get_Start_Pos()
     {
-        Vector3 startpos = rb.position;
-        maxY = startpos[1] + 0.15F;
-        minY = startpos[1] - 1.0F;
+        startpos = rb.position;
+        maxY = startpos[1] + 0.1F;
+        minY = startpos[1] - 0.3F;
 
     }
 
     // Update is called once per frame
+    public void MoveUp()
+    {
+        flag = 1;
+        
+    }
+    public void MoveDown()
+    {
+        flag = -1;
+    }
     void FixedUpdate()
     {
-        Vector3 pos = rb.position;
-        if (pos[1] < maxY) {
-            while(pos[1]<maxY){
-                rb.position += Vector3.up * speed * Time.fixedDeltaTime; }
-        }
-        if (pos[1] > minY)
+        Vector3 corrent_pos = startpos;
+        if (flag == 1)
         {
-            rb.position += Vector3.up * (-1F)*speed * Time.fixedDeltaTime;
+            if (rb.position[1] < maxY)
+            {
+
+                rb.position += Vector3.up * speed * Time.fixedDeltaTime;
+            }
+            else
+            {
+                flag = -1;
+            }
+        }   
+        if (flag == -1)
+        {
+            if (rb.position[1] > minY)
+            {
+                rb.position += Vector3.down * speed * Time.fixedDeltaTime;
+            }
+            else
+            {
+                flag = 1;
+            }
         }
+    }
+    public void Stop()
+    {
+        flag = 0;
     }
 }
